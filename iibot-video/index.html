@@ -2,160 +2,178 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<title>II Bot — презентация платформы</title>
+<title>II Bot — Farabi IBS</title>
 <style>
+@font-face{font-family:"Cormorant";font-weight:600;src:url(assets/cormorant-garamond-cyrillic-600-normal.woff2) format("woff2");unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Cormorant";font-weight:600;src:url(assets/cormorant-garamond-latin-600-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F}
+@font-face{font-family:"Cormorant";font-weight:700;src:url(assets/cormorant-garamond-cyrillic-700-normal.woff2) format("woff2");unicode-range:U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:"Cormorant";font-weight:700;src:url(assets/cormorant-garamond-latin-700-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+2000-206F}
 :root{
-  --bg:#050b1f; --panel:#0b1532; --card:#101c3f; --line:rgba(150,175,255,.15);
-  --text:#f1f5ff; --muted:#93a1cc; --blue:#3b82f6; --cyan:#38bdf8; --violet:#8b5cf6;
-  --green:#34d399; --amber:#fbbf24; --rose:#fb7185;
+  --ink:#20262c; --ink2:#262c33; --ink3:#313841; --cream:#fffbf7; --paper:#ffffff; --sand:#efe8dd; --line:#e7dfd2;
+  --taupe:#a3927b; --taupeD:#7a6c58; --coral:#f06543; --coralD:#cf4c2c; --coralT:#fdebe4; --green:#2f8f5b; --greenT:#e6f3eb;
+  --muted:#857a6b; --mutedD:#b9ae9f;
 }
 *{box-sizing:border-box;margin:0;padding:0;transition:none!important}
-html,body{width:1920px;height:1080px;overflow:hidden;background:var(--bg);
-  font-family:Inter,"DejaVu Sans",sans-serif;color:var(--text);-webkit-font-smoothing:antialiased}
-#stage{position:absolute;inset:0;overflow:hidden}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--ink);font-family:Inter,"DejaVu Sans",sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+#stage{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse at 50% 120%,#3a3530 0,var(--ink) 60%)}
 .abs{position:absolute}
-/* background */
-.blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.55}
-#grid{position:absolute;inset:0;background-image:linear-gradient(rgba(120,150,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(120,150,255,.05) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(circle at 50% 50%,#000 30%,transparent 80%)}
+.serif{font-family:"Cormorant",Georgia,serif}
 svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
-
-/* orb */
+#rays{position:absolute;left:960px;top:1180px;width:0;height:0}
+#rays i{position:absolute;left:0;top:0;width:2px;height:1500px;margin-left:-1px;transform-origin:50% 0;background:linear-gradient(rgba(163,146,123,.0),rgba(163,146,123,.16) 60%,rgba(163,146,123,.0))}
+.glowc{position:absolute;border-radius:50%;filter:blur(110px)}
 .orb{position:relative;border-radius:50%;
-  background:radial-gradient(circle at 34% 30%,#ffffff 0,#bfe6ff 9%,#5bb8ff 26%,#3b6cf6 50%,#6d3ff0 74%,#2a1663 100%);
-  box-shadow:0 0 30px rgba(91,184,255,.55),0 0 80px rgba(139,92,246,.35),inset -8px -10px 24px rgba(30,10,90,.55)}
+  background:radial-gradient(circle at 34% 30%,#fffbf7 0,#ffd8c8 10%,#f7916f 28%,#f06543 48%,#b8573c 72%,#5a3f33 100%);
+  box-shadow:0 0 26px rgba(240,101,67,.45),inset -8px -10px 22px rgba(60,30,20,.45)}
 .orb::after{content:"";position:absolute;inset:-14%;border-radius:50%;border:2px solid transparent;
-  background:conic-gradient(from var(--rot,0deg),rgba(56,189,248,.0),rgba(56,189,248,.9),rgba(139,92,246,.9),rgba(139,92,246,0) 60%) border-box;
+  background:conic-gradient(from var(--rot,0deg),rgba(163,146,123,0),rgba(163,146,123,.95),rgba(240,101,67,.95),rgba(240,101,67,0) 60%) border-box;
   -webkit-mask:linear-gradient(#000 0 0) padding-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
-
-/* shell */
-#shell{left:40px;top:36px;width:1840px;height:1008px;border-radius:28px;
-  background:linear-gradient(180deg,rgba(16,28,64,.92),rgba(8,15,38,.95));
-  border:1px solid var(--line);box-shadow:0 40px 120px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.02) inset;overflow:hidden;transform-origin:50% 50%}
-#side{left:0;top:0;width:250px;height:100%;border-right:1px solid var(--line);background:rgba(6,12,32,.55)}
-.brand{position:absolute;left:24px;top:26px;display:flex;align-items:center;gap:12px}
-.brand b{font-size:19px;letter-spacing:.2px}
-.brand small{display:block;font-size:13px;color:var(--muted);font-weight:500;margin-top:2px}
-.nav{position:absolute;left:16px;width:218px;height:52px;display:flex;align-items:center;gap:14px;padding:0 16px;font-size:17px;font-weight:600;color:var(--muted);border-radius:14px}
-.nav.on{color:#fff}
-#navInd{left:16px;width:218px;height:52px;border-radius:14px;background:linear-gradient(90deg,rgba(59,130,246,.35),rgba(139,92,246,.18));border:1px solid rgba(120,160,255,.35)}
-.me{position:absolute;left:16px;bottom:22px;width:218px;display:flex;gap:12px;align-items:center;padding:12px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
-.ava{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:16px;background:linear-gradient(135deg,#38bdf8,#8b5cf6);color:#fff;flex:none}
-.me b{font-size:15px}.me small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
-
-#top{left:250px;top:0;width:1150px;height:78px;border-bottom:1px solid var(--line)}
-.ttl{position:absolute;left:32px;top:22px;font-size:26px;font-weight:700;white-space:nowrap}
-.topR{position:absolute;right:28px;top:17px;display:flex;align-items:center;gap:14px;color:var(--muted);font-size:15px;font-weight:500}
-.ib{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);display:grid;place-items:center;position:relative;color:#cfd8ff}
-.badge{position:absolute;top:-6px;right:-6px;min-width:22px;height:22px;border-radius:11px;background:var(--rose);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;padding:0 5px}
-
-#main{left:250px;top:78px;width:1150px;height:930px}
-.scene{position:absolute;left:32px;top:26px;width:1086px;height:880px}
-.card{position:absolute;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));border:1px solid var(--line);padding:22px 24px}
-.lbl{font-size:14px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px}
-.lbl svg{width:20px;height:20px;color:var(--cyan)}
-.h1{font-size:40px;font-weight:800;letter-spacing:-.5px}
+.kaz{display:flex;flex-direction:column;justify-content:center;color:var(--cream)}
+.kaz b{font-family:"Cormorant",serif;font-weight:700;font-size:64px;line-height:1;letter-spacing:1px}
+.kaz small{font-size:15px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--mutedD);margin-top:10px}
+.vline{width:2px;background:linear-gradient(transparent,var(--taupe),transparent)}
+#shell{left:40px;top:36px;width:1840px;height:1008px;border-radius:26px;background:var(--cream);overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.55);transform-origin:50% 50%}
+#side{left:0;top:0;width:250px;height:100%;background:var(--ink)}
+.nav{position:absolute;left:16px;width:218px;height:52px;display:flex;align-items:center;gap:14px;padding:0 16px;font-size:17px;font-weight:600;color:var(--mutedD);border-radius:12px}
+.nav.on{color:var(--cream)}
+#navInd{left:16px;width:218px;height:52px;border-radius:12px;background:rgba(240,101,67,.16);border:1px solid rgba(240,101,67,.4)}
+#navInd::before{content:"";position:absolute;left:-1px;top:12px;width:4px;height:26px;border-radius:2px;background:var(--coral)}
+.me{position:absolute;left:16px;bottom:22px;width:218px;display:flex;gap:12px;align-items:center;padding:12px;border-radius:14px;background:var(--ink2);border:1px solid rgba(163,146,123,.25);color:var(--cream)}
+.ava{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:16px;background:linear-gradient(135deg,var(--coral),var(--taupe));color:#fff;flex:none}
+.me b{font-size:15px}.me small{display:block;color:var(--mutedD);font-size:13px;margin-top:2px}
+#top{left:250px;top:0;width:1150px;height:84px;border-bottom:1px solid var(--line)}
+.ttl{position:absolute;left:32px;top:16px;font-family:"Cormorant",serif;font-size:40px;font-weight:700;white-space:nowrap;color:var(--ink)}
+.topR{position:absolute;right:28px;top:20px;display:flex;align-items:center;gap:14px;color:var(--muted);font-size:15px;font-weight:500}
+.ib{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:#fff;display:grid;place-items:center;position:relative;color:var(--ink)}
+.badge{position:absolute;top:-6px;right:-6px;min-width:22px;height:22px;border-radius:11px;background:var(--coral);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;padding:0 5px}
+#main{left:250px;top:84px;width:1150px;height:924px}
+.scene{position:absolute;left:32px;top:24px;width:1086px;height:876px}
+.card{position:absolute;border-radius:18px;background:var(--paper);border:1px solid var(--line);padding:22px 24px;box-shadow:0 10px 30px rgba(32,38,44,.06)}
+.card.dk{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+.lbl{font-size:13px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--taupeD);display:flex;align-items:center;gap:10px}
+.dk .lbl{color:var(--mutedD)}
+.lbl svg{width:20px;height:20px;color:var(--coral)}
+.h1{font-family:"Cormorant",serif;font-size:56px;font-weight:700;letter-spacing:-.3px;line-height:1}
 .sub{font-size:19px;color:var(--muted);font-weight:500}
-.chip{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;font-size:15px;font-weight:600;background:rgba(59,130,246,.16);color:#bcd5ff;border:1px solid rgba(96,150,255,.3);white-space:nowrap}
-.chip.g{background:rgba(52,211,153,.14);color:#a7f3d0;border-color:rgba(52,211,153,.35)}
-.chip.a{background:rgba(251,191,36,.14);color:#fde68a;border-color:rgba(251,191,36,.35)}
-.chip.v{background:rgba(139,92,246,.18);color:#ddd0ff;border-color:rgba(139,92,246,.4)}
+.dk .sub{color:var(--mutedD)}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;font-size:15px;font-weight:600;background:#f4eee5;color:#6b5d49;border:1px solid #e3d8c7;white-space:nowrap}
+.chip.g{background:var(--greenT);color:var(--green);border-color:#bfe0cc}
+.chip.a{background:var(--coralT);color:var(--coralD);border-color:#f7c7b7}
+.dk .chip{background:rgba(255,251,247,.08);color:var(--cream);border-color:rgba(163,146,123,.45)}
+.dk .chip.g{background:rgba(47,143,91,.2);color:#a8e0bf;border-color:rgba(47,143,91,.5)}
 .chip svg{width:16px;height:16px}
-.icbox{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(56,189,248,.22),rgba(139,92,246,.22));border:1px solid rgba(120,160,255,.3);color:#cfe6ff;flex:none}
-.icbox.v{background:linear-gradient(135deg,rgba(139,92,246,.3),rgba(236,72,153,.15));color:#e4d8ff}
-.bar{height:12px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden}
-.bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--cyan),var(--violet))}
+.icbox{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--coralT);color:var(--coral);flex:none}
+.icbox.v{background:var(--ink);color:var(--cream)}
+.bar{height:12px;border-radius:6px;background:#efe8dd;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--coral),var(--taupe))}
 .row{display:flex;align-items:center;gap:14px}
-.big{font-size:44px;font-weight:800;letter-spacing:-1px}
-
-/* bot panel */
-#bot{left:1400px;top:0;width:440px;height:100%;border-left:1px solid var(--line);background:linear-gradient(180deg,rgba(9,17,44,.96),rgba(7,12,32,.98))}
-.bh{position:absolute;left:0;top:0;width:100%;height:96px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:0 24px}
-.bh b{font-size:21px}.bh small{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:14px;margin-top:3px;font-weight:500}
-.dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green)}
+.big{font-family:"Cormorant",serif;font-size:60px;font-weight:700;line-height:1}
+#bot{left:1400px;top:0;width:440px;height:100%;background:var(--ink2);color:var(--cream)}
+.bh{position:absolute;left:0;top:0;width:100%;height:96px;border-bottom:1px solid rgba(163,146,123,.25);display:flex;align-items:center;gap:16px;padding:0 24px}
+.bh b{font-family:"Cormorant",serif;font-size:30px;line-height:1}.bh small{display:flex;align-items:center;gap:7px;color:var(--mutedD);font-size:14px;margin-top:4px;font-weight:500}
+.dot{width:9px;height:9px;border-radius:50%;background:#4ade80;box-shadow:0 0 10px #4ade80}
 .chat{position:absolute;left:20px;top:116px;width:400px;height:770px;display:flex;flex-direction:column;gap:14px}
-.msg{max-width:372px;padding:15px 18px;border-radius:20px;font-size:17px;line-height:1.42;font-weight:500}
-.msg.bot{align-self:flex-start;background:linear-gradient(180deg,rgba(59,130,246,.2),rgba(139,92,246,.14));border:1px solid rgba(120,160,255,.3);border-top-left-radius:6px}
-.msg.user{align-self:flex-end;background:#f1f5ff;color:#0b1532;border-top-right-radius:6px;font-weight:600}
+.msg{max-width:372px;padding:15px 18px;border-radius:18px;font-size:17px;line-height:1.42;font-weight:500}
+.msg.bot{align-self:flex-start;background:rgba(255,251,247,.07);border:1px solid rgba(163,146,123,.35);border-top-left-radius:6px}
+.msg.user{align-self:flex-end;background:var(--coral);color:#fff;border-top-right-radius:6px;font-weight:600}
 .dots{display:inline-flex;gap:6px;padding:4px 0}
-.dots span{width:9px;height:9px;border-radius:50%;background:#cfe0ff}
-.caret{display:inline-block;width:2px;height:1.05em;background:#cfe0ff;vertical-align:-3px;margin-left:2px}
-.inp{position:absolute;left:20px;bottom:22px;width:400px;height:60px;border-radius:18px;border:1px solid rgba(120,160,255,.3);background:rgba(255,255,255,.04);display:flex;align-items:center;padding:0 10px 0 20px;font-size:17px;font-weight:500}
-.inp .ph{color:#6c7aa6}
-.send{margin-left:auto;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}
+.dots span{width:9px;height:9px;border-radius:50%;background:var(--cream)}
+.caret{display:inline-block;width:2px;height:1.05em;background:currentColor;vertical-align:-3px;margin-left:2px}
+.inp{position:absolute;left:20px;bottom:22px;width:400px;height:60px;border-radius:16px;border:1px solid rgba(163,146,123,.35);background:var(--ink3);display:flex;align-items:center;padding:0 10px 0 20px;font-size:17px;font-weight:500}
+.inp .ph{color:#8d8577}
+.send{margin-left:auto;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--coral);color:#fff}
 .send svg{width:20px;height:20px}
 .mini{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.mini .chip{font-size:14px;padding:6px 12px}
+.mini .chip{font-size:14px;padding:6px 12px;background:rgba(255,251,247,.08);color:var(--cream);border-color:rgba(163,146,123,.45)}
+.mini .chip.a{background:rgba(240,101,67,.2);border-color:rgba(240,101,67,.5)}
 .li{display:flex;gap:10px;align-items:flex-start;margin-top:9px;font-size:16px}
-.num{width:24px;height:24px;border-radius:8px;background:linear-gradient(135deg,var(--cyan),var(--violet));display:grid;place-items:center;font-size:13px;font-weight:800;flex:none;margin-top:1px}
-.btn{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:10px 18px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--violet));font-weight:700;font-size:16px;color:#fff}
-.btn.ok{background:rgba(52,211,153,.18);color:#a7f3d0;border:1px solid rgba(52,211,153,.4)}
-
-/* cursor */
-#cursor{left:0;top:0;width:34px;height:34px;z-index:50;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
-#ripple{width:64px;height:64px;border-radius:50%;border:3px solid rgba(120,200,255,.9);z-index:49}
-
-/* login */
+.num{width:24px;height:24px;border-radius:7px;background:var(--coral);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:800;flex:none;margin-top:1px}
+.btn{display:inline-flex;align-items:center;gap:8px;margin-top:12px;padding:10px 18px;border-radius:12px;background:var(--coral);font-weight:700;font-size:16px;color:#fff}
+.btn.ok{background:rgba(47,143,91,.22);color:#a8e0bf;border:1px solid rgba(47,143,91,.5)}
+#cursor{left:0;top:0;width:34px;height:34px;z-index:50;filter:drop-shadow(0 4px 8px rgba(0,0,0,.35))}
+#ripple{width:64px;height:64px;border-radius:50%;border:3px solid var(--coral);z-index:49}
 #login{inset:0;display:grid;place-items:center}
-.lcard{width:560px;padding:44px 48px;border-radius:30px;background:linear-gradient(180deg,rgba(18,30,70,.92),rgba(9,16,40,.95));border:1px solid var(--line);box-shadow:0 40px 120px rgba(0,0,0,.6);text-align:center}
-.fld{margin-top:16px;height:62px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.04);display:flex;align-items:center;gap:14px;padding:0 20px;font-size:19px;font-weight:500;text-align:left;color:#dfe7ff}
-.fld svg{color:var(--muted)}
-.lbtn{margin-top:22px;height:62px;border-radius:16px;display:grid;place-items:center;font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--blue),var(--violet))}
-
-/* misc */
-.task{display:flex;align-items:center;gap:14px;height:66px;padding:0 16px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid var(--line);margin-top:12px;font-size:18px;font-weight:600;position:relative}
+.lcard{width:580px;padding:42px 50px;border-radius:26px;background:var(--cream);box-shadow:0 40px 120px rgba(0,0,0,.6);text-align:center}
+.fld{margin-top:16px;height:62px;border-radius:14px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;gap:14px;padding:0 20px;font-size:19px;font-weight:500;text-align:left;color:var(--ink)}
+.fld svg{color:var(--taupe)}
+.lbtn{margin-top:22px;height:62px;border-radius:14px;display:grid;place-items:center;font-size:20px;font-weight:700;background:var(--coral);color:#fff}
+.task{display:flex;align-items:center;gap:14px;height:66px;padding:0 16px;border-radius:14px;background:#fbf8f3;border:1px solid var(--line);margin-top:12px;font-size:18px;font-weight:600;position:relative}
 .task .when{margin-left:auto}
-.pbadge{position:absolute;left:-12px;top:-10px;width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,var(--cyan),var(--violet));display:grid;place-items:center;font-weight:800;font-size:15px;box-shadow:0 0 18px rgba(56,189,248,.7)}
-.day{flex:1;border-radius:14px;padding:10px 0;text-align:center;background:rgba(255,255,255,.03);border:1px solid var(--line)}
+.pbadge{position:absolute;left:-12px;top:-10px;width:30px;height:30px;border-radius:9px;background:var(--coral);color:#fff;display:grid;place-items:center;font-weight:800;font-size:15px;box-shadow:0 0 16px rgba(240,101,67,.6)}
+.day{flex:1;border-radius:12px;padding:10px 0;text-align:center;background:#fbf8f3;border:1px solid var(--line)}
 .day b{display:block;font-size:22px;margin-top:2px}
 .day small{font-size:13px;color:var(--muted);font-weight:600}
-.day.on{background:linear-gradient(180deg,rgba(59,130,246,.35),rgba(139,92,246,.2));border-color:rgba(120,160,255,.5)}
+.day.on{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+.day.on small{color:var(--mutedD)}
 .ev{margin-top:12px;display:flex;gap:12px;align-items:center;font-size:16px;font-weight:600}
-.ev i{width:4px;height:34px;border-radius:2px;background:var(--cyan)}
+.ev i{width:4px;height:34px;border-radius:2px;background:var(--coral)}
 .ev small{display:block;color:var(--muted);font-weight:500;font-size:14px}
 .stage{position:absolute;top:84px;text-align:center;width:160px;margin-left:-80px}
-.node{width:58px;height:58px;border-radius:50%;margin:0 auto;display:grid;place-items:center;border:2px solid rgba(150,175,255,.3);background:#0d1736;font-weight:800;font-size:18px;color:var(--muted)}
-.node.done{background:linear-gradient(135deg,#10b981,#34d399);border-color:transparent;color:#05261b}
-.node.cur{background:linear-gradient(135deg,var(--blue),var(--violet));border-color:transparent;color:#fff}
+.node{width:58px;height:58px;border-radius:50%;margin:0 auto;display:grid;place-items:center;border:2px solid var(--line);background:#fff;font-weight:800;font-size:18px;color:var(--muted)}
+.node.done{background:var(--green);border-color:transparent;color:#fff}
+.node.cur{background:var(--coral);border-color:transparent;color:#fff}
 .stage span{display:block;margin-top:12px;font-size:16px;font-weight:600;line-height:1.25}
-.rec{display:flex;align-items:center;gap:16px;height:76px;padding:0 18px;border-radius:16px;background:rgba(255,255,255,.035);border:1px solid var(--line);margin-top:12px}
+.rec{display:flex;align-items:center;gap:16px;height:76px;padding:0 18px;border-radius:14px;background:#fbf8f3;border:1px solid var(--line);margin-top:12px}
 .rec b{font-size:19px;display:block}.rec small{font-size:15px;color:var(--muted);font-weight:500}
-.rec .chip{margin-left:auto}
 .chk{display:flex;align-items:center;gap:14px;font-size:18px;font-weight:600;margin-top:18px;line-height:1.3}
-.cb{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:rgba(52,211,153,.18);border:1px solid rgba(52,211,153,.45);color:var(--green);flex:none}
+.cb{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:var(--greenT);border:1px solid #bfe0cc;color:var(--green);flex:none}
 .cb svg{width:18px;height:18px;stroke-width:3}
-.opp{position:absolute;width:258px;height:258px;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02));border:1px solid var(--line);padding:22px}
+.cb.c{background:var(--coralT);border-color:#f7c7b7;color:var(--coral)}
+.cb.n{background:#f4eee5;border-color:var(--line);color:var(--muted)}
+.opp{position:absolute;width:258px;height:258px;border-radius:18px;background:#fff;border:1px solid var(--line);padding:22px;box-shadow:0 10px 30px rgba(32,38,44,.05)}
 .opp b{display:block;font-size:20px;line-height:1.25;margin-top:18px;min-height:75px}
 .opp .chip{margin-top:12px;font-size:14px}
-.tag{font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;position:absolute;top:24px;right:20px}
-.tnode{position:absolute;top:0;width:250px;margin-left:-125px;text-align:center}
-.tnode .n{width:96px;height:96px;margin:0 auto;border-radius:50%;display:grid;place-items:center;background:#0d1736;border:2px solid rgba(150,175,255,.35);color:#cfe0ff}
+.tag{font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;position:absolute;top:24px;right:20px}
+.tnode{position:absolute;top:0;width:250px;margin-left:-125px;text-align:center;color:var(--cream)}
+.tnode .n{width:96px;height:96px;margin:0 auto;border-radius:50%;display:grid;place-items:center;background:var(--ink3);border:2px solid var(--taupe);color:var(--cream)}
 .tnode .n svg{width:42px;height:42px}
 .tnode span{display:block;margin-top:18px;font-size:22px;font-weight:700;line-height:1.25}
+#staff{inset:0;background:var(--cream)}
+.q{display:flex;align-items:center;gap:14px;height:74px;padding:0 20px;border-radius:14px;background:rgba(255,251,247,.06);border:1px solid rgba(163,146,123,.3);margin-top:14px;font-size:19px;font-weight:600;color:var(--cream)}
+.q svg{color:var(--coral)}
+.q .ok{margin-left:auto}
+.ben{position:absolute;left:0;height:132px;border-radius:18px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;gap:22px;padding:0 28px;box-shadow:0 10px 30px rgba(32,38,44,.06)}
+.ben .icbox{width:66px;height:66px;border-radius:16px}
+.ben .icbox svg{width:30px;height:30px}
+.ben b{font-family:"Cormorant",serif;font-size:34px;line-height:1.05;display:block}
+.ben small{display:block;font-size:17px;color:var(--muted);font-weight:500;margin-top:6px}
 </style>
 </head>
 <body>
 <div id="stage">
-  <div class="blob" id="b1" style="width:900px;height:900px;background:#1d4ed8;left:-200px;top:-300px"></div>
-  <div class="blob" id="b2" style="width:800px;height:800px;background:#6d28d9;right:-200px;bottom:-300px"></div>
-  <div class="blob" id="b3" style="width:600px;height:600px;background:#0891b2;left:700px;top:500px;opacity:.25"></div>
-  <div id="grid"></div>
+  <div id="rays"></div>
+  <div class="glowc" id="g1" style="width:700px;height:700px;background:#f06543;opacity:.13;left:-150px;top:-250px"></div>
+  <div class="glowc" id="g2" style="width:800px;height:800px;background:#a3927b;opacity:.16;right:-250px;bottom:-350px"></div>
 
-  <!-- ===== LOGIN ===== -->
+  <!-- INTRO (video time) -->
+  <div id="intro" class="abs" data-abs style="inset:0" data-in="0" data-dur="0.3" data-out="4.6" data-fx="fade">
+    <div class="abs row" style="left:0;width:1920px;top:240px;justify-content:center;gap:56px" data-in="0.3" data-fx="up" data-dur="0.7">
+      <img src="assets/logo_h_dark.svg" style="height:150px">
+      <div class="vline" style="height:150px"></div>
+      <div class="kaz"><b>КазНУ</b><small>имени аль-Фараби</small></div>
+    </div>
+    <div class="abs serif" style="left:0;width:1920px;top:500px;text-align:center;font-size:78px;font-weight:700;color:var(--cream);line-height:1.05" data-in="1.1" data-fx="up" data-dur="0.7">Цифровая образовательная и научная платформа</div>
+    <div class="abs" style="left:0;width:1920px;top:620px;text-align:center;font-size:32px;font-weight:600;color:var(--coral);letter-spacing:.5px" data-in="1.7" data-fx="up">с интеллектуальным AI-ассистентом II Bot</div>
+    <div class="abs" style="left:900px;top:740px" data-in="2.3" data-fx="pop" data-dur="0.7"><div class="orb" data-orb style="width:120px;height:120px"></div></div>
+  </div>
+
+  <!-- LOGIN -->
   <div id="login" class="abs" data-in="0" data-dur="0.4" data-out="2.25" data-fx="zoom">
     <div class="lcard">
-      <div class="orb" data-orb style="width:84px;height:84px;margin:0 auto"></div>
-      <div style="font-size:32px;font-weight:800;margin-top:26px">Вход в личный кабинет</div>
-      <div class="sub" style="margin-top:8px;font-size:18px">Цифровая образовательная и научная среда</div>
-      <div class="fld" style="margin-top:30px"><i data-i="user"></i><span id="loginId"></span></div>
+      <img src="assets/logo_h_light.svg" style="height:92px">
+      <div style="height:1px;background:var(--line);margin:26px 0 24px"></div>
+      <div class="serif" style="font-size:40px;font-weight:700;line-height:1">Вход в личный кабинет</div>
+      <div class="sub" style="margin-top:10px;font-size:18px">Цифровая образовательная и научная среда</div>
+      <div class="fld" style="margin-top:28px"><i data-i="user"></i><span id="loginId"></span></div>
       <div class="fld"><i data-i="lock"></i><span id="loginPw" style="letter-spacing:4px"></span></div>
       <div class="lbtn" id="loginBtn">Войти</div>
     </div>
   </div>
 
-  <!-- ===== APP SHELL ===== -->
+  <!-- APP SHELL -->
   <div id="shell" class="abs">
     <div id="side" class="abs">
-      <div class="brand"><div class="orb" data-orb style="width:40px;height:40px"></div><div><b>Farabi IBS</b><small>Личный кабинет</small></div></div>
+      <img src="assets/logo_h_dark.svg" class="abs" style="left:22px;top:24px;width:206px">
       <div id="navInd" class="abs"></div>
       <div class="nav" style="top:130px"><i data-i="home"></i>Главная</div>
       <div class="nav" style="top:188px"><i data-i="book"></i>Учебный план</div>
@@ -164,6 +182,7 @@ svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke
       <div class="nav" style="top:362px"><i data-i="file"></i>Публикации</div>
       <div class="nav" style="top:420px"><i data-i="globe"></i>Возможности</div>
       <div class="nav" style="top:478px"><i data-i="message"></i>Сообщения</div>
+      <div class="abs" style="left:32px;bottom:120px;color:var(--mutedD);font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;line-height:1.5">КазНУ<br>имени аль-Фараби</div>
       <div class="me"><div class="ava">АК</div><div><b>Аружан К.</b><small>Докторант PhD</small></div></div>
     </div>
 
@@ -173,45 +192,43 @@ svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke
       <div class="ttl" data-in="17.9" data-out="29.7" data-fx="up">Моя научная деятельность</div>
       <div class="ttl" data-in="29.9" data-out="41.7" data-fx="up">Публикационная активность</div>
       <div class="ttl" data-in="41.9" data-fx="up">Возможности развития</div>
-      <div class="topR"><span>Понедельник, 9 ноября</span><div class="ib"><i data-i="search"></i></div><div class="ib"><i data-i="bell"></i><span class="badge" id="bellBadge">4</span></div><div class="ava" style="width:44px;height:44px">АК</div></div>
+      <div class="topR"><span>Понедельник, 9 ноября</span><div class="ib"><i data-i="search"></i></div><div class="ib"><i data-i="bell"></i><span class="badge" id="bellBadge">4</span></div><div class="ava">АК</div></div>
     </div>
 
     <div id="main" class="abs">
-
-      <!-- S1 WELCOME -->
+      <!-- S1 -->
       <div class="scene" data-in="2.7" data-out="7.7" data-fx="up">
-        <div class="abs" style="left:0;top:10px" data-in="2.9" data-fx="up"><div class="h1">Добро пожаловать, Аружан!</div></div>
-        <div class="abs sub" style="left:0;top:76px" data-in="3.1" data-fx="up">Докторантура PhD · Farabi International Business School</div>
-        <div class="card" style="left:0;top:140px;width:1086px;height:150px;display:flex;align-items:center;gap:28px;background:linear-gradient(90deg,rgba(59,130,246,.22),rgba(139,92,246,.14));border-color:rgba(120,160,255,.35)" data-in="3.3" data-fx="up">
+        <div class="abs" style="left:0;top:6px" data-in="2.9" data-fx="up"><div class="h1">Добро пожаловать, Аружан!</div></div>
+        <div class="abs sub" style="left:0;top:74px" data-in="3.1" data-fx="up">Докторантура PhD · Farabi International Business School</div>
+        <div class="card dk" style="left:0;top:136px;width:1086px;height:154px;display:flex;align-items:center;gap:28px" data-in="3.3" data-fx="up">
           <div class="orb" data-orb style="width:84px;height:84px;flex:none;margin-left:8px"></div>
-          <div><div style="font-size:26px;font-weight:800">II Bot подключён</div><div class="sub" style="margin-top:6px">Персональный помощник в обучении и научной деятельности</div></div>
+          <div><div class="serif" style="font-size:40px;font-weight:700;line-height:1">II Bot подключён</div><div class="sub" style="margin-top:8px">Персональный помощник в обучении и научной деятельности</div></div>
         </div>
-        <!-- 6 tiles -->
-        <div class="card" style="left:0;top:316px;width:350px;height:262px" data-in="5.0" data-fx="pop"><div class="icbox"><i data-i="calendar"></i></div><div class="sub" style="margin-top:22px">Индивидуальное расписание</div><div style="font-size:28px;font-weight:800;margin-top:8px">3 занятия сегодня</div></div>
-        <div class="card" style="left:368px;top:316px;width:350px;height:262px" data-in="5.25" data-fx="pop"><div class="icbox"><i data-i="clock"></i></div><div class="sub" style="margin-top:22px">Предстоящее занятие</div><div style="font-size:28px;font-weight:800;margin-top:8px">10:00 · Методология исследований</div></div>
-        <div class="card" style="left:736px;top:316px;width:350px;height:262px" data-in="5.5" data-fx="pop"><div class="icbox"><i data-i="clipboard"></i></div><div class="sub" style="margin-top:22px">Домашние задания</div><div style="font-size:28px;font-weight:800;margin-top:8px">2 активных</div></div>
-        <div class="card" style="left:0;top:596px;width:350px;height:262px" data-in="5.75" data-fx="pop"><div class="icbox v"><i data-i="target"></i></div><div class="sub" style="margin-top:22px">Ближайший дедлайн</div><div style="font-size:28px;font-weight:800;margin-top:8px;color:#fde68a">завтра, 23:59</div></div>
-        <div class="card" style="left:368px;top:596px;width:350px;height:262px" data-in="6.0" data-fx="pop"><div class="icbox v"><i data-i="chart"></i></div><div class="sub" style="margin-top:22px">Текущая успеваемость</div><div style="font-size:28px;font-weight:800;margin-top:8px">GPA <span data-count="3.67" data-s="6.0" data-dec="2"></span></div></div>
-        <div class="card" style="left:736px;top:596px;width:350px;height:262px" data-in="6.25" data-fx="pop"><div class="icbox v"><i data-i="bell"></i></div><div class="sub" style="margin-top:22px">Уведомления</div><div style="font-size:28px;font-weight:800;margin-top:8px">4 новых</div></div>
+        <div class="card" style="left:0;top:314px;width:350px;height:264px" data-in="5.0" data-fx="pop"><div class="icbox"><i data-i="calendar"></i></div><div class="sub" style="margin-top:22px">Индивидуальное расписание</div><div style="font-size:28px;font-weight:800;margin-top:8px">3 занятия сегодня</div></div>
+        <div class="card" style="left:368px;top:314px;width:350px;height:264px" data-in="5.25" data-fx="pop"><div class="icbox"><i data-i="clock"></i></div><div class="sub" style="margin-top:22px">Предстоящее занятие</div><div style="font-size:28px;font-weight:800;margin-top:8px">10:00 · Методология исследований</div></div>
+        <div class="card" style="left:736px;top:314px;width:350px;height:264px" data-in="5.5" data-fx="pop"><div class="icbox"><i data-i="clipboard"></i></div><div class="sub" style="margin-top:22px">Домашние задания</div><div style="font-size:28px;font-weight:800;margin-top:8px">2 активных</div></div>
+        <div class="card" style="left:0;top:596px;width:350px;height:264px" data-in="5.75" data-fx="pop"><div class="icbox v"><i data-i="target"></i></div><div class="sub" style="margin-top:22px">Ближайший дедлайн</div><div style="font-size:28px;font-weight:800;margin-top:8px;color:var(--coral)">завтра, 23:59</div></div>
+        <div class="card" style="left:368px;top:596px;width:350px;height:264px" data-in="6.0" data-fx="pop"><div class="icbox v"><i data-i="chart"></i></div><div class="sub" style="margin-top:22px">Текущая успеваемость</div><div style="font-size:28px;font-weight:800;margin-top:8px">GPA <span data-count="3.67" data-s="6.0" data-dec="2"></span></div></div>
+        <div class="card" style="left:736px;top:596px;width:350px;height:264px" data-in="6.25" data-fx="pop"><div class="icbox v"><i data-i="bell"></i></div><div class="sub" style="margin-top:22px">Уведомления</div><div style="font-size:28px;font-weight:800;margin-top:8px">4 новых</div></div>
       </div>
 
-      <!-- S2 DASHBOARD -->
+      <!-- S2 -->
       <div class="scene" data-in="7.9" data-out="17.7" data-fx="up">
-        <div class="card" style="left:0;top:0;width:530px;height:178px" data-in="8.0" data-fx="up">
+        <div class="card dk" style="left:0;top:0;width:530px;height:178px" data-in="8.0" data-fx="up">
           <div class="lbl"><i data-i="cap"></i>Моя образовательная программа</div>
-          <div style="font-size:30px;font-weight:800;margin-top:16px">Докторантура PhD</div>
-          <div class="row" style="margin-top:12px"><span class="chip">Бизнес-администрирование</span><span class="chip v">Год 1 из 3</span></div>
+          <div class="serif" style="font-size:44px;font-weight:700;margin-top:10px;line-height:1">Докторантура PhD</div>
+          <div class="row" style="margin-top:14px"><span class="chip">Бизнес-администрирование</span><span class="chip">Год 1 из 3</span></div>
         </div>
         <div class="card" style="left:548px;top:0;width:538px;height:178px" data-in="8.15" data-fx="up">
           <div class="lbl"><i data-i="book"></i>Индивидуальный учебный план</div>
-          <div class="row" style="margin-top:16px;align-items:baseline"><span class="big" data-count="42" data-s="8.4" data-dec="0"></span><span class="sub">из 180 кредитов ECTS</span></div>
+          <div class="row" style="margin-top:12px;align-items:baseline"><span class="big" data-count="42" data-s="8.4" data-dec="0"></span><span class="sub">из 180 кредитов ECTS</span></div>
           <div class="bar" style="margin-top:14px"><i data-grow="8.4" style="width:23.3%"></i></div>
         </div>
         <div class="card" style="left:0;top:196px;width:348px;height:300px" data-in="8.3" data-fx="up">
           <div class="lbl"><i data-i="chart"></i>Академический прогресс</div>
           <div class="row" style="margin-top:18px;gap:22px">
-            <svg width="130" height="130" viewBox="0 0 130 130"><defs><linearGradient id="rg" x1="0" x2="1"><stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs><circle cx="65" cy="65" r="54" stroke="rgba(255,255,255,.08)" stroke-width="13" fill="none"/><circle data-ring="8.6" data-p="0.72" cx="65" cy="65" r="54" stroke="url(#rg)" stroke-width="13" fill="none" stroke-linecap="round" transform="rotate(-90 65 65)"/><text x="65" y="74" text-anchor="middle" fill="#fff" font-size="28" font-weight="800" font-family="Inter"><tspan data-count="72" data-s="8.6" data-dec="0"></tspan>%</text></svg>
-            <div><div class="sub" style="font-size:16px">GPA</div><div style="font-size:36px;font-weight:800">3.67</div><div class="sub" style="font-size:16px;margin-top:6px">семестр</div></div>
+            <svg width="130" height="130" viewBox="0 0 130 130"><defs><linearGradient id="rg" x1="0" x2="1"><stop offset="0" stop-color="#f06543"/><stop offset="1" stop-color="#a3927b"/></linearGradient></defs><circle cx="65" cy="65" r="54" stroke="#efe8dd" stroke-width="13" fill="none"/><circle data-ring="8.6" data-p="0.72" cx="65" cy="65" r="54" stroke="url(#rg)" stroke-width="13" fill="none" stroke-linecap="round" transform="rotate(-90 65 65)"/><text x="65" y="74" text-anchor="middle" fill="#20262c" font-size="28" font-weight="800" font-family="Inter"><tspan data-count="72" data-s="8.6" data-dec="0"></tspan>%</text></svg>
+            <div><div class="sub" style="font-size:16px">GPA</div><div class="serif" style="font-size:54px;font-weight:700;line-height:1">3.67</div><div class="sub" style="font-size:16px;margin-top:6px">семестр</div></div>
           </div>
           <div class="row" style="margin-top:20px;gap:8px"><span class="chip g">A · 2</span><span class="chip">A- · 1</span><span class="chip">B+ · 1</span></div>
         </div>
@@ -219,84 +236,84 @@ svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke
           <div class="lbl"><i data-i="calendar"></i>Календарь занятий</div>
           <div class="row" style="margin-top:16px;gap:8px"><div class="day on"><small>ПН</small><b>9</b></div><div class="day"><small>ВТ</small><b>10</b></div><div class="day"><small>СР</small><b>11</b></div><div class="day"><small>ЧТ</small><b>12</b></div><div class="day"><small>ПТ</small><b>13</b></div></div>
           <div class="ev"><i></i><div>10:00 · Методология исследований<small>ауд. 301</small></div></div>
-          <div class="ev"><i style="background:var(--violet)"></i><div>14:00 · Академическое письмо<small>онлайн</small></div></div>
+          <div class="ev"><i style="background:var(--taupe)"></i><div>14:00 · Академическое письмо<small>онлайн</small></div></div>
         </div>
-        <div class="card" style="left:784px;top:196px;width:302px;height:300px" data-in="8.6" data-fx="up" id="supCard">
+        <div class="card" style="left:784px;top:196px;width:302px;height:300px" data-in="8.6" data-fx="up">
           <div class="lbl"><i data-i="user"></i>Научный руководитель</div>
           <div class="ava" style="width:72px;height:72px;font-size:24px;margin-top:20px">НР</div>
           <div style="font-size:20px;font-weight:800;margin-top:14px">Профессор, д.э.н.</div>
           <div class="sub" style="font-size:16px;margin-top:4px">Консультация: чт, 15:00</div>
         </div>
-        <div class="card" style="left:0;top:514px;width:640px;height:366px" data-in="8.75" data-fx="up">
+        <div class="card" style="left:0;top:514px;width:640px;height:362px" data-in="8.75" data-fx="up">
           <div class="lbl"><i data-i="clipboard"></i>Предстоящие задания</div>
-          <div class="task" data-glow="12.7" style="margin-top:18px"><span class="pbadge" data-in="12.7" data-fx="pop">1</span><span style="color:var(--cyan)"><i data-i="file"></i></span>Эссе по методологии<span class="chip a when">завтра</span></div>
-          <div class="task" data-glow="13.1"><span class="pbadge" data-in="13.1" data-fx="pop">2</span><span style="color:var(--cyan)"><i data-i="chart"></i></span>Тест по статистике<span class="chip when">через 3 дня</span></div>
-          <div class="task" data-glow="13.5"><span class="pbadge" data-in="13.5" data-fx="pop">3</span><span style="color:var(--violet)"><i data-i="flask"></i></span>Отчёт по НИР за семестр<span class="chip v when">через 12 дней</span></div>
+          <div class="task" data-glow="12.7" style="margin-top:18px"><span class="pbadge" data-in="12.7" data-fx="pop">1</span><span style="color:var(--coral)"><i data-i="file"></i></span>Эссе по методологии<span class="chip a when">завтра</span></div>
+          <div class="task" data-glow="13.1"><span class="pbadge" data-in="13.1" data-fx="pop">2</span><span style="color:var(--coral)"><i data-i="chart"></i></span>Тест по статистике<span class="chip when">через 3 дня</span></div>
+          <div class="task" data-glow="13.5"><span class="pbadge" data-in="13.5" data-fx="pop">3</span><span style="color:var(--taupeD)"><i data-i="flask"></i></span>Отчёт по НИР за семестр<span class="chip when">через 12 дней</span></div>
         </div>
-        <div class="card" style="left:658px;top:514px;width:428px;height:366px" data-in="8.9" data-fx="up">
+        <div class="card" style="left:658px;top:514px;width:428px;height:362px" data-in="8.9" data-fx="up">
           <div class="lbl"><i data-i="target"></i>Ближайшие сроки</div>
-          <div style="position:absolute;left:44px;top:84px;width:3px;height:250px;background:linear-gradient(var(--amber),var(--violet));border-radius:2px"></div>
-          <div class="abs" style="left:34px;top:88px;display:flex;gap:18px;align-items:center"><span style="width:23px;height:23px;border-radius:50%;background:var(--amber);border:4px solid #1a2550"></span><div><b style="font-size:18px">10 ноября</b><div class="sub" style="font-size:15px">Эссе по методологии</div></div></div>
-          <div class="abs" style="left:34px;top:172px;display:flex;gap:18px;align-items:center"><span style="width:23px;height:23px;border-radius:50%;background:var(--cyan);border:4px solid #1a2550"></span><div><b style="font-size:18px">12 ноября</b><div class="sub" style="font-size:15px">Тест по статистике</div></div></div>
-          <div class="abs" style="left:34px;top:256px;display:flex;gap:18px;align-items:center"><span style="width:23px;height:23px;border-radius:50%;background:var(--violet);border:4px solid #1a2550"></span><div><b style="font-size:18px">21 ноября</b><div class="sub" style="font-size:15px">Отчёт по НИР</div></div></div>
+          <div style="position:absolute;left:44px;top:84px;width:3px;height:250px;background:linear-gradient(var(--coral),var(--taupe));border-radius:2px"></div>
+          <div class="abs" style="left:34px;top:88px;display:flex;gap:18px;align-items:center"><span style="width:23px;height:23px;border-radius:50%;background:var(--coral);border:4px solid #fff;box-shadow:0 0 0 1px var(--line)"></span><div><b style="font-size:18px">10 ноября</b><div class="sub" style="font-size:15px">Эссе по методологии</div></div></div>
+          <div class="abs" style="left:34px;top:172px;display:flex;gap:18px;align-items:center"><span style="width:23px;height:23px;border-radius:50%;background:#c98d73;border:4px solid #fff;box-shadow:0 0 0 1px var(--line)"></span><div><b style="font-size:18px">12 ноября</b><div class="sub" style="font-size:15px">Тест по статистике</div></div></div>
+          <div class="abs" style="left:34px;top:256px;display:flex;gap:18px;align-items:center"><span style="width:23px;height:23px;border-radius:50%;background:var(--taupe);border:4px solid #fff;box-shadow:0 0 0 1px var(--line)"></span><div><b style="font-size:18px">21 ноября</b><div class="sub" style="font-size:15px">Отчёт по НИР</div></div></div>
         </div>
       </div>
 
-      <!-- S3 SCIENCE -->
+      <!-- S3 -->
       <div class="scene" data-in="17.9" data-out="29.7" data-fx="up">
-        <div class="card" style="left:0;top:0;width:1086px;height:192px;background:linear-gradient(90deg,rgba(59,130,246,.2),rgba(139,92,246,.14));border-color:rgba(120,160,255,.35)" data-in="18.0" data-fx="up">
+        <div class="card dk" style="left:0;top:0;width:1086px;height:192px" data-in="18.0" data-fx="up">
           <div class="lbl"><i data-i="award"></i>Тема диссертационного исследования</div>
-          <div style="font-size:28px;font-weight:800;margin-top:14px;line-height:1.25">«Цифровая трансформация бизнес-образования: модели и эффективность»</div>
+          <div class="serif" style="font-size:38px;font-weight:700;margin-top:10px;line-height:1.1">«Цифровая трансформация бизнес-образования: модели и эффективность»</div>
           <div class="row" style="margin-top:14px;gap:10px"><span class="chip g"><i data-i="check"></i>Тема утверждена</span><span class="chip"><i data-i="user"></i>Научный руководитель: профессор, д.э.н.</span></div>
         </div>
         <div class="card" style="left:0;top:210px;width:1086px;height:260px" data-in="18.2" data-fx="up">
-          <div class="lbl"><i data-i="flask"></i>Индивидуальный план НИР (ЭИРМ)<span style="margin-left:auto;font-size:30px;color:#fff;letter-spacing:0;text-transform:none;font-weight:800"><span data-count="58" data-s="19.0" data-dur="1.8" data-dec="0"></span>%</span></div>
-          <div class="abs" style="left:110px;top:112px;width:866px;height:6px;border-radius:3px;background:rgba(255,255,255,.09)"></div>
-          <div class="abs" style="left:110px;top:112px;height:6px;border-radius:3px;width:563px;background:linear-gradient(90deg,var(--green),var(--cyan),var(--violet))" data-grow="19.0" data-gdur="1.8"></div>
+          <div class="lbl"><i data-i="flask"></i>Индивидуальный план НИР (ЭИРМ)<span class="serif" style="margin-left:auto;font-size:46px;color:var(--ink);letter-spacing:0;text-transform:none;font-weight:700;line-height:.8"><span data-count="58" data-s="19.0" data-dur="1.8" data-dec="0"></span>%</span></div>
+          <div class="abs" style="left:110px;top:112px;width:866px;height:6px;border-radius:3px;background:#efe8dd"></div>
+          <div class="abs" style="left:110px;top:112px;height:6px;border-radius:3px;width:563px;background:linear-gradient(90deg,var(--green),var(--coral))" data-grow="19.0" data-gdur="1.8"></div>
           <div class="stage" style="left:110px"><div class="node" data-state="19.2:done">1</div><span>Выбор темы</span></div>
           <div class="stage" style="left:283px"><div class="node" data-state="19.55:done">2</div><span>Обзор литературы</span></div>
           <div class="stage" style="left:456px"><div class="node" data-state="19.9:done">3</div><span>Методология</span></div>
-          <div class="stage" style="left:629px"><div class="node" data-state="20.3:cur">4</div><span>Сбор данных<br><b style="color:var(--cyan)">65%</b></span></div>
+          <div class="stage" style="left:629px"><div class="node" data-state="20.3:cur">4</div><span>Сбор данных<br><b style="color:var(--coral)">65%</b></span></div>
           <div class="stage" style="left:802px"><div class="node">5</div><span>Анализ<br>результатов</span></div>
           <div class="stage" style="left:976px"><div class="node">6</div><span>Текст<br>диссертации</span></div>
         </div>
-        <div class="card" style="left:0;top:488px;width:350px;height:392px" data-in="18.4" data-fx="up">
+        <div class="card" style="left:0;top:488px;width:350px;height:388px" data-in="18.4" data-fx="up">
           <div class="lbl"><i data-i="file"></i>План публикаций</div>
           <div class="chk" style="margin-top:22px"><span class="cb"><i data-i="check"></i></span>Статья 1 — подготовлена</div>
-          <div class="chk"><span class="cb" style="background:rgba(56,189,248,.16);border-color:rgba(56,189,248,.45);color:var(--cyan)"><i data-i="clock"></i></span>Статья 2 — в работе</div>
-          <div class="chk"><span class="cb" style="background:rgba(255,255,255,.05);border-color:var(--line);color:var(--muted)"><i data-i="target"></i></span>Статья 3 — в плане</div>
-          <div class="chk"><span class="cb" style="background:rgba(255,255,255,.05);border-color:var(--line);color:var(--muted)"><i data-i="mic"></i></span>Доклад на конференции</div>
+          <div class="chk"><span class="cb c"><i data-i="clock"></i></span>Статья 2 — в работе</div>
+          <div class="chk"><span class="cb n"><i data-i="target"></i></span>Статья 3 — в плане</div>
+          <div class="chk"><span class="cb n"><i data-i="mic"></i></span>Доклад на конференции</div>
         </div>
-        <div class="card" style="left:368px;top:488px;width:350px;height:392px" data-in="18.55" data-fx="up" data-glow="25.9">
+        <div class="card" style="left:368px;top:488px;width:350px;height:388px" data-in="18.55" data-fx="up" data-glow="25.9">
           <div class="lbl"><i data-i="users"></i>Консультации</div>
           <div class="row" style="margin-top:22px"><div class="ava" style="width:60px;height:60px;font-size:20px">НР</div><div><b style="font-size:19px">Научный руководитель</b><div class="sub" style="font-size:15px">Проведено: 6 консультаций</div></div></div>
           <div class="sub" style="margin-top:30px;font-size:15px">Следующая консультация</div>
-          <div style="font-size:26px;font-weight:800;margin-top:6px">Четверг, 15:00</div>
+          <div class="serif" style="font-size:40px;font-weight:700;margin-top:4px;line-height:1">Четверг, 15:00</div>
           <div data-in="25.9" data-fx="pop" style="margin-top:16px"><span class="chip g"><i data-i="check"></i>Запись подтверждена</span></div>
         </div>
-        <div class="card" style="left:736px;top:488px;width:350px;height:392px" data-in="18.7" data-fx="up">
+        <div class="card" style="left:736px;top:488px;width:350px;height:388px" data-in="18.7" data-fx="up">
           <div class="lbl"><i data-i="clipboard"></i>Отчёты и аттестация</div>
           <div class="chk" style="margin-top:22px"><span class="cb"><i data-i="check"></i></span>Отчёт за 1 семестр принят</div>
-          <div class="chk"><span class="cb" style="background:rgba(251,191,36,.15);border-color:rgba(251,191,36,.45);color:var(--amber)"><i data-i="clock"></i></span>Отчёт за 2 семестр — через 12 дней</div>
+          <div class="chk"><span class="cb c"><i data-i="clock"></i></span>Отчёт за 2 семестр — через 12 дней</div>
           <div class="sub" style="margin-top:30px;font-size:15px">Промежуточная аттестация</div>
-          <div style="font-size:26px;font-weight:800;margin-top:6px">через <span data-count="34" data-s="19.2" data-dec="0"></span> дня</div>
-          <div class="bar" style="margin-top:14px"><i data-grow="19.2" style="width:62%;background:linear-gradient(90deg,var(--amber),var(--rose))"></i></div>
+          <div class="serif" style="font-size:40px;font-weight:700;margin-top:4px;line-height:1">через <span data-count="34" data-s="19.2" data-dec="0"></span> дня</div>
+          <div class="bar" style="margin-top:14px"><i data-grow="19.2" style="width:62%"></i></div>
         </div>
       </div>
 
-      <!-- S4 PUBLICATIONS -->
+      <!-- S4 -->
       <div class="scene" data-in="29.9" data-out="41.7" data-fx="up">
-        <div class="card" style="left:0;top:0;width:1086px;height:190px;overflow:hidden" data-in="30.0" data-fx="up">
-          <div id="scan" class="abs" style="top:0;width:260px;height:100%;background:linear-gradient(90deg,transparent,rgba(56,189,248,.22),transparent)"></div>
+        <div class="card dk" style="left:0;top:0;width:1086px;height:190px;overflow:hidden" data-in="30.0" data-fx="up">
+          <div id="scan" class="abs" style="top:0;width:260px;height:100%;background:linear-gradient(90deg,transparent,rgba(240,101,67,.28),transparent)"></div>
           <div class="lbl"><i data-i="search"></i>II Bot анализирует научную тематику
             <span style="margin-left:auto" data-in="35.9" data-fx="pop"><span class="chip g"><i data-i="check"></i>Анализ завершён</span></span></div>
-          <div style="font-size:24px;font-weight:800;margin-top:14px">«Цифровая трансформация бизнес-образования: модели и эффективность»</div>
-          <div class="row" style="margin-top:18px;gap:10px">
-            <span class="chip v" data-in="33.0" data-fx="pop">Цифровая трансформация</span>
-            <span class="chip v" data-in="33.4" data-fx="pop">Бизнес-образование</span>
-            <span class="chip v" data-in="33.8" data-fx="pop">EdTech</span>
-            <span class="chip v" data-in="34.2" data-fx="pop">Высшее образование</span>
-            <span class="chip v" data-in="34.6" data-fx="pop">Управление знаниями</span>
+          <div class="serif" style="font-size:31px;font-weight:700;margin-top:10px;white-space:nowrap">«Цифровая трансформация бизнес-образования: модели и эффективность»</div>
+          <div class="row" style="margin-top:16px;gap:10px">
+            <span class="chip" data-in="33.0" data-fx="pop">Цифровая трансформация</span>
+            <span class="chip" data-in="33.4" data-fx="pop">Бизнес-образование</span>
+            <span class="chip" data-in="33.8" data-fx="pop">EdTech</span>
+            <span class="chip" data-in="34.2" data-fx="pop">Высшее образование</span>
+            <span class="chip" data-in="34.6" data-fx="pop">Управление знаниями</span>
           </div>
         </div>
         <div class="card" style="left:0;top:208px;width:640px;height:610px" data-in="30.2" data-fx="up">
@@ -316,52 +333,50 @@ svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke
           <div class="chk" data-in="39.6" data-fx="left"><span class="cb"><i data-i="check"></i></span>Подготовить статью к отправке</div>
           <div class="chk" data-in="39.9" data-fx="left"><span class="cb"><i data-i="check"></i></span>Контроль публикационных дедлайнов</div>
         </div>
-        <div class="abs sub" style="left:0;top:838px;font-size:15px" data-in="38.0" data-fx="fade">Рекомендации носят информационный характер. Решение о публикации принимает редакция.</div>
+        <div class="abs sub" style="left:0;top:836px;font-size:15px" data-in="38.0" data-fx="fade">Рекомендации носят информационный характер. Решение о публикации принимает редакция.</div>
       </div>
 
-      <!-- S5 OPPORTUNITIES -->
+      <!-- S5 -->
       <div class="scene" data-in="41.9" data-out="51.4" data-fx="up">
-        <div class="card" style="left:0;top:0;width:1086px;height:262px;overflow:hidden;background:linear-gradient(90deg,rgba(59,130,246,.2),rgba(139,92,246,.16));border-color:rgba(120,160,255,.35)" data-in="42.0" data-fx="up">
+        <div class="card dk" style="left:0;top:0;width:1086px;height:262px;overflow:hidden" data-in="42.0" data-fx="up">
           <div class="lbl"><i data-i="globe"></i>Международный научный трек</div>
-          <div style="font-size:30px;font-weight:800;margin-top:16px;width:560px;line-height:1.25">Практика, стажировки и академическая мобильность — в одном месте</div>
+          <div class="serif" style="font-size:40px;font-weight:700;margin-top:12px;width:600px;line-height:1.05">Практика, стажировки и академическая мобильность — в одном месте</div>
           <div class="sub" style="margin-top:14px;width:560px;font-size:18px">II Bot сообщает о требованиях, сроках подачи заявок и документах</div>
           <svg class="abs" style="right:30px;top:-30px" width="440" height="320" viewBox="0 0 440 320">
-            <g data-spin stroke="rgba(150,190,255,.28)" fill="none" stroke-width="1.5">
+            <g data-spin stroke="rgba(163,146,123,.45)" fill="none" stroke-width="1.5">
               <circle cx="220" cy="170" r="140"/><ellipse cx="220" cy="170" rx="140" ry="50"/><ellipse cx="220" cy="170" rx="140" ry="100"/><ellipse cx="220" cy="170" rx="50" ry="140"/><ellipse cx="220" cy="170" rx="100" ry="140"/><line x1="80" y1="170" x2="360" y2="170"/>
             </g>
             <g fill="none" stroke-width="3" stroke-linecap="round">
-              <path data-draw="42.6" d="M250 150 Q 180 40 110 120" stroke="#38bdf8"/>
-              <path data-draw="42.9" d="M250 150 Q 300 40 340 110" stroke="#a78bfa"/>
-              <path data-draw="43.2" d="M250 150 Q 300 260 180 250" stroke="#38bdf8"/>
-              <path data-draw="43.5" d="M250 150 Q 380 200 330 240" stroke="#a78bfa"/>
+              <path data-draw="42.6" d="M250 150 Q 180 40 110 120" stroke="#f06543"/>
+              <path data-draw="42.9" d="M250 150 Q 300 40 340 110" stroke="#d9c8ae"/>
+              <path data-draw="43.2" d="M250 150 Q 300 260 180 250" stroke="#f06543"/>
+              <path data-draw="43.5" d="M250 150 Q 380 200 330 240" stroke="#d9c8ae"/>
             </g>
-            <g><circle cx="250" cy="150" r="9" fill="#fff"/><circle cx="110" cy="120" r="7" fill="#38bdf8" data-in="43.2" data-fx="fade"/><circle cx="340" cy="110" r="7" fill="#a78bfa" data-in="43.5" data-fx="fade"/><circle cx="180" cy="250" r="7" fill="#38bdf8" data-in="43.8" data-fx="fade"/><circle cx="330" cy="240" r="7" fill="#a78bfa" data-in="44.1" data-fx="fade"/></g>
+            <g><circle cx="250" cy="150" r="9" fill="#fffbf7"/><circle cx="110" cy="120" r="7" fill="#f06543" data-in="43.2" data-fx="fade"/><circle cx="340" cy="110" r="7" fill="#d9c8ae" data-in="43.5" data-fx="fade"/><circle cx="180" cy="250" r="7" fill="#f06543" data-in="43.8" data-fx="fade"/><circle cx="330" cy="240" r="7" fill="#d9c8ae" data-in="44.1" data-fx="fade"/></g>
           </svg>
         </div>
-        <div class="opp" style="left:0;top:280px" data-in="42.3" data-fx="pop"><span class="tag" style="color:var(--cyan)">Практика</span><div class="icbox"><i data-i="briefcase"></i></div><b>Производственная практика</b><span class="chip">Подбор баз практики</span></div>
-        <div class="opp" style="left:276px;top:280px" data-in="42.45" data-fx="pop"><span class="tag" style="color:var(--cyan)">Практика</span><div class="icbox"><i data-i="flask"></i></div><b>Научно-исследовательская практика</b><span class="chip">По теме диссертации</span></div>
-        <div class="opp" style="left:552px;top:280px" data-in="42.6" data-fx="pop"><span class="tag" style="color:var(--cyan)">Практика</span><div class="icbox"><i data-i="building"></i></div><b>Организации и научные центры</b><span class="chip">Поиск партнёров</span></div>
-        <div class="opp" style="left:828px;top:280px" data-in="42.75" data-fx="pop" data-glow="44.4" id="oppIntern"><span class="tag" style="color:#c4b5fd">Мир</span><div class="icbox v"><i data-i="plane"></i></div><b>Зарубежные научные стажировки</b><span class="chip g">Приём заявок открыт</span></div>
-        <div class="opp" style="left:0;top:556px;height:270px" data-in="42.9" data-fx="pop"><span class="tag" style="color:#c4b5fd">Мир</span><div class="icbox v"><i data-i="users"></i></div><b>Академическая мобильность</b><span class="chip v">Семестр за рубежом</span></div>
-        <div class="opp" style="left:276px;top:556px;height:270px" data-in="43.05" data-fx="pop"><span class="tag" style="color:#c4b5fd">Мир</span><div class="icbox v"><i data-i="cap"></i></div><b>Международные университеты и центры</b><span class="chip v">Партнёрские вузы</span></div>
-        <div class="opp" style="left:552px;top:556px;height:270px" data-in="43.2" data-fx="pop"><span class="tag" style="color:#c4b5fd">Мир</span><div class="icbox v"><i data-i="user"></i></div><b>Зарубежные научные руководители</b><span class="chip v">Совместное руководство</span></div>
-        <div class="opp" style="left:828px;top:556px;height:270px" data-in="43.35" data-fx="pop"><span class="tag" style="color:#c4b5fd">Мир</span><div class="icbox v"><i data-i="coins"></i></div><b>Конференции, гранты и проекты</b><span class="chip v">Актуальные конкурсы</span></div>
+        <div class="opp" style="left:0;top:280px" data-in="42.3" data-fx="pop"><span class="tag" style="color:var(--coral)">Практика</span><div class="icbox"><i data-i="briefcase"></i></div><b>Производственная практика</b><span class="chip">Подбор баз практики</span></div>
+        <div class="opp" style="left:276px;top:280px" data-in="42.45" data-fx="pop"><span class="tag" style="color:var(--coral)">Практика</span><div class="icbox"><i data-i="flask"></i></div><b>Научно-исследовательская практика</b><span class="chip">По теме диссертации</span></div>
+        <div class="opp" style="left:552px;top:280px" data-in="42.6" data-fx="pop"><span class="tag" style="color:var(--coral)">Практика</span><div class="icbox"><i data-i="building"></i></div><b>Организации и научные центры</b><span class="chip">Поиск партнёров</span></div>
+        <div class="opp" style="left:828px;top:280px" data-in="42.75" data-fx="pop" data-glow="44.4" id="oppIntern"><span class="tag" style="color:var(--taupeD)">Мир</span><div class="icbox v"><i data-i="plane"></i></div><b>Зарубежные научные стажировки</b><span class="chip g">Приём заявок открыт</span></div>
+        <div class="opp" style="left:0;top:556px;height:270px" data-in="42.9" data-fx="pop"><span class="tag" style="color:var(--taupeD)">Мир</span><div class="icbox v"><i data-i="users"></i></div><b>Академическая мобильность</b><span class="chip">Семестр за рубежом</span></div>
+        <div class="opp" style="left:276px;top:556px;height:270px" data-in="43.05" data-fx="pop"><span class="tag" style="color:var(--taupeD)">Мир</span><div class="icbox v"><i data-i="cap"></i></div><b>Международные университеты и центры</b><span class="chip">Партнёрские вузы</span></div>
+        <div class="opp" style="left:552px;top:556px;height:270px" data-in="43.2" data-fx="pop"><span class="tag" style="color:var(--taupeD)">Мир</span><div class="icbox v"><i data-i="user"></i></div><b>Зарубежные научные руководители</b><span class="chip">Совместное руководство</span></div>
+        <div class="opp" style="left:828px;top:556px;height:270px" data-in="43.35" data-fx="pop"><span class="tag" style="color:var(--taupeD)">Мир</span><div class="icbox v"><i data-i="coins"></i></div><b>Конференции, гранты и проекты</b><span class="chip">Актуальные конкурсы</span></div>
       </div>
     </div>
 
     <!-- BOT PANEL -->
     <div id="bot" class="abs">
       <div class="bh"><div class="orb" data-orb style="width:52px;height:52px;flex:none"></div><div><b>II Bot</b><small><span class="dot"></span>ваш AI-ассистент · онлайн</small></div></div>
-
       <div class="chat" data-in="2.6" data-out="7.7" data-fx="fade">
         <div class="msg bot" data-show="2.9" data-type="3.3">Добро пожаловать! Я II Bot — ваш персональный помощник в обучении и научной деятельности.</div>
         <div class="msg bot" data-show="4.45" data-type="4.65">Собрал для вас главное на сегодня:
           <div class="mini">
-            <span class="chip" data-in="5.0" data-fx="pop">Расписание</span><span class="chip" data-in="5.25" data-fx="pop">Занятия</span><span class="chip" data-in="5.5" data-fx="pop">Задания</span><span class="chip a" data-in="5.75" data-fx="pop">Дедлайны</span><span class="chip g" data-in="6.0" data-fx="pop">Успеваемость</span><span class="chip v" data-in="6.25" data-fx="pop">Уведомления</span>
+            <span class="chip" data-in="5.0" data-fx="pop">Расписание</span><span class="chip" data-in="5.25" data-fx="pop">Занятия</span><span class="chip" data-in="5.5" data-fx="pop">Задания</span><span class="chip a" data-in="5.75" data-fx="pop">Дедлайны</span><span class="chip" data-in="6.0" data-fx="pop">Успеваемость</span><span class="chip" data-in="6.25" data-fx="pop">Уведомления</span>
           </div>
         </div>
       </div>
-
       <div class="chat" data-in="7.9" data-out="17.7" data-fx="fade">
         <div class="msg bot" data-show="8.4" data-type="8.6">Это ваш кабинет: программа, учебный план, прогресс, календарь и научный руководитель.</div>
         <div class="msg user" data-show="10.9">С чего начать сегодня?</div>
@@ -372,23 +387,20 @@ svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke
         </div>
         <div class="msg bot" data-show="14.6" data-type="14.9">Напомню о каждом сроке заранее.</div>
       </div>
-
       <div class="chat" data-in="17.9" data-out="29.7" data-fx="fade">
         <div class="msg bot" data-show="19.3" data-type="19.6">Ваш прогресс по плану НИР — 58%. Текущий этап: сбор данных.</div>
         <div class="msg bot" data-show="21.6" data-type="21.9">Отчёт за семестр нужно сдать через 12 дней. До аттестации — 34 дня.</div>
         <div class="msg bot" data-show="23.4" data-type="23.7">Записать вас на консультацию с научным руководителем?
           <div data-in="24.6" data-out="25.75" data-dur="0.3" data-fx="pop" style="height:0;overflow:visible"><span class="btn" id="btnBook"><i data-i="calendar"></i>Записаться</span></div>
-          <div data-in="25.8" data-fx="pop" style="margin-top:-0px"><span class="btn ok"><i data-i="check"></i>Четверг, 15:00</span></div>
+          <div data-in="25.8" data-fx="pop"><span class="btn ok"><i data-i="check"></i>Четверг, 15:00</span></div>
         </div>
       </div>
-
       <div class="chat" data-in="29.9" data-out="41.7" data-fx="fade">
         <div class="msg user" data-show="31.95">Где опубликовать статью по моей теме?</div>
         <div class="msg bot" data-show="32.2" data-type="32.6">Анализирую тематику вашего исследования…</div>
         <div class="msg bot" data-show="36.1" data-type="36.4">Для вашей темы найдены подходящие научные журналы. Посмотрите требования к публикации и сроки подачи.</div>
         <div class="msg bot" data-show="39.0" data-type="39.3">Помогу подготовить статью и прослежу за дедлайнами.</div>
       </div>
-
       <div class="chat" data-in="41.9" data-out="51.4" data-fx="fade">
         <div class="msg user" data-show="43.75">Какие есть зарубежные стажировки?</div>
         <div class="msg bot" data-show="44.0" data-type="44.4">Открыт приём заявок на зарубежную научную стажировку. Срок подачи — через 21 день.</div>
@@ -400,31 +412,62 @@ svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke
         </div>
         <div class="msg bot" data-show="49.3" data-type="49.5">Также подберу практику, гранты и конференции.</div>
       </div>
-
       <div class="inp"><span id="inpText"></span><span class="send" id="sendBtn"><i data-i="send"></i></span></div>
     </div>
   </div>
 
-  <!-- ===== FINALE ===== -->
-  <div id="finale" class="abs" style="inset:0" data-in="51.9" data-fx="fade" data-dur="0.6">
-    <div class="abs" style="left:0;top:118px;width:1920px;text-align:center;font-size:24px;font-weight:700;letter-spacing:3px;color:var(--muted);text-transform:uppercase" data-in="52.1" data-fx="up">Траектория обучения</div>
-    <div class="abs" style="left:0;top:200px;width:1920px;height:300px">
-      <svg class="abs" style="left:0;top:0" width="1920" height="120"><defs><linearGradient id="tg" gradientUnits="userSpaceOnUse" x1="210" y1="0" x2="1710" y2="0"><stop offset="0" stop-color="#38bdf8"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs><path data-draw="52.4" data-ddur="3.1" d="M210 48 H1710" stroke="url(#tg)" stroke-width="5" fill="none" stroke-linecap="round"/></svg>
-      <div class="tnode" style="left:210px" data-in="52.4" data-fx="pop"><div class="n" data-glow="52.6"><i data-i="book"></i></div><span>Обучение</span></div>
-      <div class="tnode" style="left:510px" data-in="53.0" data-fx="pop"><div class="n" data-glow="53.2"><i data-i="flask"></i></div><span>Научное исследование</span></div>
-      <div class="tnode" style="left:810px" data-in="53.6" data-fx="pop"><div class="n" data-glow="53.8"><i data-i="file"></i></div><span>Публикации</span></div>
-      <div class="tnode" style="left:1110px" data-in="54.2" data-fx="pop"><div class="n" data-glow="54.4"><i data-i="plane"></i></div><span>Зарубежная стажировка</span></div>
-      <div class="tnode" style="left:1410px" data-in="54.8" data-fx="pop"><div class="n" data-glow="55.0"><i data-i="clipboard"></i></div><span>Предзащита</span></div>
-      <div class="tnode" style="left:1710px" data-in="55.4" data-fx="pop"><div class="n" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6);border-color:transparent;color:#fff"><i data-i="cap"></i></div><span>Защита диссертации</span></div>
+  <!-- STAFF (video time) -->
+  <div id="staff" class="abs" data-abs data-in="69.3" data-out="80.7" data-dur="0.6" data-fx="fade">
+    <img src="assets/logo_h_light.svg" class="abs" style="left:1590px;top:46px;height:76px" data-in="69.6" data-fx="fade">
+    <div class="abs" style="left:90px;top:70px;font-size:16px;font-weight:700;letter-spacing:3px;color:var(--coral);text-transform:uppercase" data-in="69.7" data-fx="up">Для команды бизнес-школы</div>
+    <div class="abs serif" style="left:90px;top:104px;font-size:66px;font-weight:700;line-height:1.02;color:var(--ink);white-space:nowrap" data-in="69.9" data-fx="up" data-dur="0.6">II Bot экономит время сотрудников бизнес-школы</div>
+    <div class="abs" style="left:90px;top:200px;font-size:25px;font-weight:500;color:var(--muted)" data-in="70.3" data-fx="up">Типовые вопросы студентов решаются автоматически — работа выполняется быстро и качественно</div>
+    <div class="card dk abs" style="left:90px;top:270px;width:880px;height:560px;padding:30px 32px" data-in="70.6" data-fx="up">
+      <div class="row"><div class="orb" data-orb style="width:48px;height:48px"></div><div><div class="serif" style="font-size:34px;font-weight:700;line-height:1">Обращения студентов</div><div class="sub" style="font-size:16px;margin-top:4px">II Bot отвечает сразу — в любое время</div></div><span class="chip" style="margin-left:auto">24/7</span></div>
+      <div style="margin-top:12px">
+        <div class="q" data-in="71.2" data-fx="left"><i data-i="message"></i>Когда сдавать отчёт по НИР?<span class="ok chip g" data-in="71.7" data-fx="pop"><i data-i="check"></i>Ответ II Bot</span></div>
+        <div class="q" data-in="72.0" data-fx="left"><i data-i="message"></i>Какие документы нужны для стажировки?<span class="ok chip g" data-in="72.5" data-fx="pop"><i data-i="check"></i>Ответ II Bot</span></div>
+        <div class="q" data-in="72.8" data-fx="left"><i data-i="message"></i>Где посмотреть расписание?<span class="ok chip g" data-in="73.3" data-fx="pop"><i data-i="check"></i>Ответ II Bot</span></div>
+        <div class="q" data-in="73.6" data-fx="left"><i data-i="message"></i>Какие требования к оформлению статьи?<span class="ok chip g" data-in="74.1" data-fx="pop"><i data-i="check"></i>Ответ II Bot</span></div>
+        <div class="q" data-in="74.4" data-fx="left"><i data-i="message"></i>Когда консультация с руководителем?<span class="ok chip g" data-in="74.9" data-fx="pop"><i data-i="check"></i>Ответ II Bot</span></div>
+      </div>
     </div>
-    <div class="abs" style="left:880px;top:540px" data-in="56.0" data-fx="pop" data-dur="0.7"><div class="orb" data-orb style="width:160px;height:160px"></div></div>
-    <div class="abs" style="left:0;top:752px;width:1920px;text-align:center;font-size:54px;font-weight:800;letter-spacing:-.5px" data-in="56.6" data-fx="up">II Bot — ваш интеллектуальный навигатор</div>
-    <div class="abs" style="left:0;top:830px;width:1920px;text-align:center;font-size:36px;font-weight:600;color:#bcd0ff" data-in="57.0" data-fx="up">от первого дня обучения до научных достижений</div>
-    <div class="abs" style="left:0;top:950px;width:1920px;text-align:center;font-size:20px;font-weight:600;letter-spacing:2px;color:var(--muted)" data-in="57.6" data-fx="fade">FARABI INTERNATIONAL BUSINESS SCHOOL · КАЗНУ ИМЕНИ АЛЬ-ФАРАБИ</div>
+    <div class="abs" style="left:1010px;top:270px;width:820px;height:560px">
+      <div class="ben" style="top:0;width:820px" data-in="71.4" data-fx="up"><div class="icbox"><i data-i="clock"></i></div><div><b>Экономия рабочего времени</b><small>Ответы на типовые вопросы без участия сотрудников</small></div></div>
+      <div class="ben" style="top:142px;width:820px" data-in="72.4" data-fx="up"><div class="icbox v"><i data-i="bell"></i></div><div><b>Автоматические напоминания</b><small>О сроках, отчётах и документах — без ручных рассылок</small></div></div>
+      <div class="ben" style="top:284px;width:820px" data-in="73.4" data-fx="up"><div class="icbox"><i data-i="file"></i></div><div><b>Быстрая подготовка информации</b><small>Требования, инструкции и сроки — всегда под рукой</small></div></div>
+      <div class="ben" style="top:426px;width:820px" data-in="74.4" data-fx="up"><div class="icbox v"><i data-i="target"></i></div><div><b>Качество и точность</b><small>Единые актуальные данные — меньше ошибок и повторных запросов</small></div></div>
+    </div>
+    <div class="abs row" style="left:90px;top:870px;width:1740px;height:120px;border-radius:18px;background:var(--ink);color:var(--cream);padding:0 40px;gap:26px" data-in="75.8" data-fx="up" data-dur="0.6">
+      <div class="icbox" style="width:64px;height:64px;background:var(--coral);color:#fff"><i data-i="users"></i></div>
+      <div><div class="serif" style="font-size:42px;font-weight:700;line-height:1">Сотрудники фокусируются на главном</div><div style="font-size:20px;color:var(--mutedD);margin-top:6px;font-weight:500">качестве образования, науке и развитии студентов</div></div>
+    </div>
+  </div>
+
+  <!-- FINALE (video time) -->
+  <div id="finale" class="abs" data-abs style="inset:0" data-in="80.9" data-fx="fade" data-dur="0.6">
+    <div class="abs" style="left:0;top:96px;width:1920px;text-align:center;font-size:18px;font-weight:700;letter-spacing:4px;color:var(--taupe);text-transform:uppercase" data-in="81.1" data-fx="up">Траектория обучения</div>
+    <div class="abs" style="left:0;top:160px;width:1920px;height:300px">
+      <svg class="abs" style="left:0;top:0" width="1920" height="120"><defs><linearGradient id="tg" gradientUnits="userSpaceOnUse" x1="210" y1="0" x2="1710" y2="0"><stop offset="0" stop-color="#a3927b"/><stop offset="1" stop-color="#f06543"/></linearGradient></defs><path data-draw="81.4" data-ddur="3.2" d="M210 48 H1710" stroke="url(#tg)" stroke-width="4" fill="none" stroke-linecap="round"/></svg>
+      <div class="tnode" style="left:210px" data-in="81.4" data-fx="pop"><div class="n" data-glow="81.6"><i data-i="book"></i></div><span>Обучение</span></div>
+      <div class="tnode" style="left:510px" data-in="82.0" data-fx="pop"><div class="n" data-glow="82.2"><i data-i="flask"></i></div><span>Научное исследование</span></div>
+      <div class="tnode" style="left:810px" data-in="82.6" data-fx="pop"><div class="n" data-glow="82.8"><i data-i="file"></i></div><span>Публикации</span></div>
+      <div class="tnode" style="left:1110px" data-in="83.2" data-fx="pop"><div class="n" data-glow="83.4"><i data-i="plane"></i></div><span>Зарубежная стажировка</span></div>
+      <div class="tnode" style="left:1410px" data-in="83.8" data-fx="pop"><div class="n" data-glow="84.0"><i data-i="clipboard"></i></div><span>Предзащита</span></div>
+      <div class="tnode" style="left:1710px" data-in="84.4" data-fx="pop"><div class="n" style="background:var(--coral);border-color:var(--coral)"><i data-i="cap"></i></div><span>Защита диссертации</span></div>
+    </div>
+    <div class="abs" style="left:900px;top:470px" data-in="85.0" data-fx="pop" data-dur="0.7"><div class="orb" data-orb style="width:120px;height:120px"></div></div>
+    <div class="abs serif" style="left:0;top:628px;width:1920px;text-align:center;font-size:82px;font-weight:700;color:var(--cream);line-height:1" data-in="85.5" data-fx="up">II Bot — ваш интеллектуальный навигатор</div>
+    <div class="abs" style="left:0;top:728px;width:1920px;text-align:center;font-size:34px;font-weight:600;color:var(--coral)" data-in="85.9" data-fx="up">от первого дня обучения до научных достижений</div>
+    <div class="abs row" style="left:0;width:1920px;top:850px;justify-content:center;gap:48px" data-in="86.6" data-fx="up" data-dur="0.7">
+      <img src="assets/logo_h_dark.svg" style="height:110px">
+      <div class="vline" style="height:110px"></div>
+      <div class="kaz"><b style="font-size:52px">КазНУ</b><small>имени аль-Фараби</small></div>
+    </div>
   </div>
 
   <div id="ripple" class="abs"></div>
-  <svg id="cursor" class="abs" viewBox="0 0 24 24"><path d="M4 2 L4 20 L9 15.5 L12.5 22.5 L15.5 21 L12 14 L19 14 Z" fill="#fff" stroke="#0b1532" stroke-width="1.4" stroke-linejoin="round"/></svg>
+  <svg id="cursor" class="abs" viewBox="0 0 24 24"><path d="M4 2 L4 20 L9 15.5 L12.5 22.5 L15.5 21 L12 14 L19 14 Z" fill="#fff" stroke="#20262c" stroke-width="1.4" stroke-linejoin="round"/></svg>
 </div>
 
 <script>
@@ -456,20 +499,19 @@ coins:'<circle cx="8" cy="8" r="6"/><path d="M18.1 10.4A6 6 0 1 1 10.3 18M7 6h1v
 news:'<path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-4 0v-9h4"/><path d="M18 14h-8M15 18h-5M10 6h8v4h-8z"/>',
 lock:'<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>'
 };
-document.querySelectorAll('i[data-i]').forEach(el=>{
-  el.outerHTML='<svg class="i" viewBox="0 0 24 24">'+ICONS[el.dataset.i]+'</svg>';
-});
+document.querySelectorAll('i[data-i]').forEach(el=>{el.outerHTML='<svg class="i" viewBox="0 0 24 24">'+ICONS[el.dataset.i]+'</svg>';});
+(()=>{const r=document.getElementById('rays');let h='';for(let a=-80;a<=80;a+=8)h+=`<i style="transform:rotate(${180+a}deg)"></i>`;r.innerHTML=h;})();
 
 const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
 const ease=x=>{x=clamp(x);return 1-Math.pow(1-x,3)};
 const eio=x=>{x=clamp(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
 const back=x=>{x=clamp(x);const c1=1.5,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const isAbs=el=>!!el.closest('[data-abs]');
 
-const fx=[...document.querySelectorAll('[data-in]')];
+const fx=[...document.querySelectorAll('[data-in]')]; fx.forEach(e=>e._abs=isAbs(e));
 const shows=[...document.querySelectorAll('[data-show]')];
 const types=[...document.querySelectorAll('[data-type]')];
 types.forEach(el=>{
-  // split: first text node is typed, children stay
   const tn=[...el.childNodes].find(n=>n.nodeType===3&&n.textContent.trim());
   el._full=tn.textContent.trim(); el._tn=document.createElement('span'); tn.replaceWith(el._tn);
   el._dots=document.createElement('span'); el._dots.className='dots'; el._dots.innerHTML='<span></span><span></span><span></span>';
@@ -477,54 +519,48 @@ types.forEach(el=>{
   el._kids=[...el.children].filter(c=>c!==el._tn&&c!==el._dots);
 });
 const counts=[...document.querySelectorAll('[data-count]')];
-const grows=[...document.querySelectorAll('[data-grow]')];
-grows.forEach(el=>el._w=el.style.width);
+const grows=[...document.querySelectorAll('[data-grow]')]; grows.forEach(el=>el._w=el.style.width);
 const rings=[...document.querySelectorAll('[data-ring]')];
-const glows=[...document.querySelectorAll('[data-glow]')];
-const draws=[...document.querySelectorAll('[data-draw]')];
-draws.forEach(p=>{p._L=p.getTotalLength();p.style.strokeDasharray=p._L});
+const glows=[...document.querySelectorAll('[data-glow]')]; glows.forEach(e=>e._abs=isAbs(e));
+const draws=[...document.querySelectorAll('[data-draw]')]; draws.forEach(p=>{p._L=p.getTotalLength();p.style.strokeDasharray=p._L;p._abs=isAbs(p)});
 const states=[...document.querySelectorAll('[data-state]')];
+document.querySelectorAll('.node').forEach(n=>n.dataset.n=n.textContent);
 const orbs=[...document.querySelectorAll('[data-orb]')];
 const navs=[...document.querySelectorAll('.nav')];
 
+// video time T (0..90) -> platform demo time t
+const KN=[[5,0],[8.5,2.6],[17,7.8],[29,17.8],[43,29.8],[57,41.8],[69,51.3],[70,52.3]];
+function tmap(T){ if(T<=KN[0][0]) return T-KN[0][0]; for(let i=0;i<KN.length-1;i++){const [a,ta]=KN[i],[b,tb]=KN[i+1]; if(T<=b) return ta+(tb-ta)*(T-a)/(b-a);} return KN[KN.length-1][1]+(T-KN[KN.length-1][0]); }
+
 const NAV=[[0,0],[17.6,3],[29.8,4],[41.8,5]];
-const INPUTS=[
- {s:10.0,e:10.75,send:10.9,text:'С чего начать сегодня?'},
- {s:30.6,e:31.7,send:31.9,text:'Где опубликовать статью по моей теме?'},
- {s:42.6,e:43.5,send:43.7,text:'Какие есть зарубежные стажировки?'}];
+const INPUTS=[{s:10.0,e:10.75,send:10.9,text:'С чего начать сегодня?'},{s:30.6,e:31.7,send:31.9,text:'Где опубликовать статью по моей теме?'},{s:42.6,e:43.5,send:43.7,text:'Какие есть зарубежные стажировки?'}];
 const PH='Спросите II Bot…';
-// cursor waypoints: [t, x, y] or [t, selector]
 const WP=[[0,1180,900],[0.4,1180,900],[1.7,960,0,'#loginBtn'],[2.6,960,0,'#loginBtn'],[3.4,1250,640],[7.6,1250,640],
  [9.3,0,0,'.inp'],[10.8,0,0,'#sendBtn'],[11.4,0,0,'#sendBtn'],[12.4,700,760],[16.6,700,760],
  [17.5,165,368],[18.6,165,368],[19.6,900,560],[24.5,900,560],[25.5,0,0,'#btnBook'],[26.3,0,0,'#btnBook'],[27.4,1000,720],[28.8,1000,720],
  [29.7,165,426],[30.4,0,0,'.inp'],[31.8,0,0,'#sendBtn'],[32.6,0,0,'#sendBtn'],[33.6,900,330],[40.8,900,330],
  [41.7,165,484],[42.4,0,0,'.inp'],[43.6,0,0,'#sendBtn'],[44.2,0,0,'#sendBtn'],[45.2,0,0,'#oppIntern'],[51.0,0,0,'#oppIntern']];
 const CLICKS=[2.0,9.5,10.9,17.6,25.6,29.8,30.5,31.9,41.8,42.5,43.7];
-
-const cur=document.getElementById('cursor'), rip=document.getElementById('ripple');
-const shell=document.getElementById('shell');
+const cur=document.getElementById('cursor'), rip=document.getElementById('ripple'), shell=document.getElementById('shell');
 function pos(w){ if(w[3]){const r=document.querySelector(w[3]).getBoundingClientRect();return [r.left+r.width*0.5,r.top+r.height*0.55]} return [w[1],w[2]]; }
-
 function setVis(el,o,tf){el.style.opacity=o;el.style.transform=tf;el.style.visibility=o<=0.001?'hidden':'visible'}
 
-window.render=function(t){
-  // background
-  document.getElementById('b1').style.transform=`translate(${Math.sin(t*.25)*120}px,${Math.cos(t*.2)*80}px)`;
-  document.getElementById('b2').style.transform=`translate(${Math.cos(t*.22)*-110}px,${Math.sin(t*.18)*90}px)`;
-  document.getElementById('b3').style.transform=`translate(${Math.sin(t*.3)*160}px,${Math.cos(t*.27)*-100}px)`;
-  orbs.forEach(o=>{o.style.setProperty('--rot',(t*140)%360+'deg');});
-  document.querySelectorAll('[data-spin]').forEach(g=>g.setAttribute('transform',`rotate(${t*6} 220 170)`));
+window.render=function(T){
+  const t=tmap(T);
+  document.getElementById('g1').style.transform=`translate(${Math.sin(T*.2)*120}px,${Math.cos(T*.17)*80}px)`;
+  document.getElementById('g2').style.transform=`translate(${Math.cos(T*.19)*-110}px,${Math.sin(T*.15)*90}px)`;
+  document.getElementById('rays').style.transform=`rotate(${Math.sin(T*.15)*4}deg)`;
+  orbs.forEach(o=>o.style.setProperty('--rot',(T*140)%360+'deg'));
+  document.querySelectorAll('[data-spin]').forEach(g=>g.setAttribute('transform',`rotate(${T*6} 220 170)`));
 
-  // shell enter/exit
   const pin=eio((t-2.2)/0.7), pout=eio((t-51.3)/0.7);
-  shell.style.opacity=pin*(1-pout);
-  shell.style.visibility=(pin*(1-pout))<=0?'hidden':'visible';
+  shell.style.opacity=pin*(1-pout); shell.style.visibility=(pin*(1-pout))<=0?'hidden':'visible';
   shell.style.transform=`perspective(2000px) rotateX(${(1-pin)*14}deg) scale(${(0.9+0.1*pin)*(1-0.08*pout)})`;
 
-  // generic fx
   for(const el of fx){
+    const tt=el._abs?T:t;
     const tin=+el.dataset.in, dur=+(el.dataset.dur||0.5), tout=el.dataset.out?+el.dataset.out:null;
-    const raw=(t-tin)/dur; const pi=ease(raw); const po=tout!==null?ease((t-tout)/0.4):0;
+    const raw=(tt-tin)/dur; const pi=ease(raw); const po=tout!==null?ease((tt-tout)/0.4):0;
     const o=clamp(raw*1.6)*(1-po); let tf='';
     switch(el.dataset.fx){
       case 'up': tf=`translateY(${(1-pi)*26-po*14}px)`;break;
@@ -535,56 +571,45 @@ window.render=function(t){
     }
     setVis(el,o,tf);
   }
-  // chat bubbles
-  for(const el of shows){ const p=ease((t-+el.dataset.show)/0.35); const o=clamp((t-+el.dataset.show)/0.2);
-    el.style.display=t<+el.dataset.show?'none':'';
-    el.style.opacity=o; el.style.transform=`translateY(${(1-p)*14}px)`; }
+  for(const el of shows){ const s=+el.dataset.show; const p=ease((t-s)/0.35);
+    el.style.display=t<s?'none':''; el.style.opacity=clamp((t-s)/0.2); el.style.transform=`translateY(${(1-p)*14}px)`; }
   for(const el of types){ const s=+el.dataset.type; const typing=t>=s; el._dots.style.display=typing?'none':'inline-flex';
-    if(!typing){[...el._dots.children].forEach((d,i)=>d.style.opacity=0.35+0.65*Math.max(0,Math.sin(t*9-i*0.9)));}
-    const n=typing?Math.floor((t-s)*70):0; const txt=el._full.slice(0,n); const done=n>=el._full.length;
-    el._tn.innerHTML=txt+(typing&&!done?'<span class="caret"></span>':'');
+    if(!typing){[...el._dots.children].forEach((d,i)=>d.style.opacity=0.35+0.65*Math.max(0,Math.sin(T*9-i*0.9)));}
+    const n=typing?Math.floor((t-s)*70):0; const done=n>=el._full.length;
+    el._tn.innerHTML=el._full.slice(0,n)+(typing&&!done?'<span class="caret"></span>':'');
     el._kids.forEach(k=>k.style.display=done?'':'none'); }
-  // input
   const inp=document.getElementById('inpText'); let it=null;
   for(const q of INPUTS){ if(t>=q.s-0.4&&t<q.send) it=q; }
   if(it&&t>=it.s){ const n=Math.floor(clamp((t-it.s)/(it.e-it.s))*it.text.length); inp.innerHTML=it.text.slice(0,n)+'<span class="caret"></span>'; inp.className=''; }
   else { inp.textContent=PH; inp.className='ph'; }
-  // counters
   for(const el of counts){ const to=+el.dataset.count, s=+el.dataset.s, d=+(el.dataset.dur||1.2), dec=+el.dataset.dec; el.textContent=(to*ease((t-s)/d)).toFixed(dec); }
   for(const el of grows){ const d=+(el.dataset.gdur||1.2); el.style.width=`calc(${el._w} * ${ease((t-+el.dataset.grow)/d)})`; }
   for(const el of rings){ const c=2*Math.PI*54; const p=+el.dataset.p*ease((t-+el.dataset.ring)/1.3); el.style.strokeDasharray=c; el.style.strokeDashoffset=c*(1-p); }
-  for(const el of glows){ const g=+el.dataset.glow; const p=clamp((t-g)/0.3); const pulse=p>0?(0.6+0.4*Math.sin((t-g)*5)):0;
-    el.style.boxShadow=p>0?`0 0 0 2px rgba(56,189,248,${0.8*p}), 0 0 ${30*pulse}px rgba(56,189,248,${0.45*p})`:'none';
-    el.style.borderColor=p>0?'rgba(56,189,248,.8)':''; }
-  for(const p of draws){ const d=+(p.dataset.ddur||0.8); p.style.strokeDashoffset=p._L*(1-eio((t-+p.dataset.draw)/d)); }
+  for(const el of glows){ const tt=el._abs?T:t; const g=+el.dataset.glow; const p=clamp((tt-g)/0.3); const pulse=p>0?(0.6+0.4*Math.sin((tt-g)*5)):0;
+    el.style.boxShadow=p>0?`0 0 0 2px rgba(240,101,67,${0.9*p}), 0 0 ${30*pulse}px rgba(240,101,67,${0.4*p})`:''; el.style.borderColor=p>0?'rgba(240,101,67,.9)':''; }
+  for(const p of draws){ const tt=p._abs?T:t; const d=+(p.dataset.ddur||0.8); p.style.strokeDashoffset=p._L*(1-eio((tt-+p.dataset.draw)/d)); }
   for(const el of states){ const [s,cls]=el.dataset.state.split(':'); const on=t>=+s; el.classList.toggle(cls,on);
     if(cls==='done'){ const want=on?'c':'n'; if(el._m!==want){ el._m=want; el.innerHTML=on?'<svg class="i" viewBox="0 0 24 24" style="stroke-width:3">'+ICONS.check+'</svg>':el.dataset.n; } }
-    if(cls==='cur'){ const q=0.5+0.5*Math.sin(t*5); el.style.boxShadow=on?`0 0 0 ${6+6*q}px rgba(59,130,246,${0.3-0.15*q})`:'none'; } }
-  // scan bar
+    if(cls==='cur'){ const q=0.5+0.5*Math.sin(T*5); el.style.boxShadow=on?`0 0 0 ${6+6*q}px rgba(240,101,67,${0.3-0.15*q})`:'none'; } }
   const sc=document.getElementById('scan'); const sp=clamp((t-32.7)/3.1); sc.style.left=(-260+((sp*2)%1)*1400)+'px'; sc.style.opacity=(t>32.7&&t<35.8)?1:0;
-  // nav
   let from=0,to=0,ts=0; for(let i=0;i<NAV.length;i++){ if(t>=NAV[i][0]){ from=i?NAV[i-1][1]:NAV[i][1]; to=NAV[i][1]; ts=NAV[i][0]; } }
-  const np=eio((t-ts)/0.35); const idx=from+(to-from)*np;
+  const idx=from+(to-from)*eio((t-ts)/0.35);
   document.getElementById('navInd').style.top=(130+idx*58)+'px';
   navs.forEach((n,i)=>n.classList.toggle('on',Math.round(idx)===i));
-  // bell badge
   document.getElementById('bellBadge').textContent=t<7.8?4:(t<29.8?3:(t<41.8?2:1));
-  // cursor
-  let a=WP[0],b=WP[0]; for(let i=0;i<WP.length-1;i++){ if(t>=WP[i][0]&&t<WP[i+1][0]){a=WP[i];b=WP[i+1];break;} if(t>=WP[WP.length-1][0]){a=b=WP[WP.length-1];} }
+  let a=WP[0],b=WP[0]; if(t>=WP[WP.length-1][0]){a=b=WP[WP.length-1];} else for(let i=0;i<WP.length-1;i++){ if(t>=WP[i][0]&&t<WP[i+1][0]){a=WP[i];b=WP[i+1];break;} }
   const pa=pos(a), pb=pos(b); const k=a===b?1:eio((t-a[0])/(b[0]-a[0]));
-  let cx=pa[0]+(pb[0]-pa[0])*k, cy=pa[1]+(pb[1]-pa[1])*k;
+  const cx=pa[0]+(pb[0]-pa[0])*k, cy=pa[1]+(pb[1]-pa[1])*k;
   let press=0; for(const c of CLICKS){ const d=t-c; if(d>-0.08&&d<0.12) press=1; }
-  const cop=t<51.2?1:clamp(1-(t-51.2)/0.4);
+  const cop=(t<0?0:clamp(t/0.3))*(t<51.2?1:clamp(1-(t-51.2)/0.4));
   cur.style.transform=`translate(${cx-6}px,${cy-4}px) scale(${press?0.85:1})`; cur.style.opacity=cop;
   let rp=-1; for(const c of CLICKS){ if(t>=c&&t<c+0.5) rp=(t-c)/0.5; }
   if(rp>=0){ rip.style.opacity=(1-rp)*cop; rip.style.transform=`translate(${cx-32}px,${cy-32}px) scale(${0.3+rp})`; } else rip.style.opacity=0;
-  // login
   const lid='ID 2025-PhD-0147'; const ln=Math.floor(clamp((t-0.35)/0.8)*lid.length);
   document.getElementById('loginId').innerHTML=lid.slice(0,ln)+(t>0.3&&t<1.15?'<span class="caret"></span>':'');
-  const pn=Math.floor(clamp((t-1.2)/0.45)*10); document.getElementById('loginPw').textContent='•'.repeat(pn);
+  document.getElementById('loginPw').textContent='•'.repeat(Math.floor(clamp((t-1.2)/0.45)*10));
   document.getElementById('loginBtn').style.transform=(t>1.95&&t<2.12)?'scale(.97)':'none';
 };
-document.querySelectorAll('.node').forEach(n=>n.dataset.n=n.textContent);
 window.render(0);
 </script>
 </body>
