@@ -25,7 +25,7 @@ var tpi = dem.subtract(dem.focal_mean({radius: 300, units: 'meters'})).rename('T
 function maskS2(img) {
   var scl = img.select('SCL');
   var ok = scl.neq(3).and(scl.neq(8)).and(scl.neq(9)).and(scl.neq(10)).and(scl.neq(11));
-  return img.updateMask(ok).select('B.*').divide(10000)
+  return img.select(['B2', 'B3', 'B4', 'B5', 'B8', 'B11', 'B12']).updateMask(ok).divide(10000)
             .copyProperties(img, ['system:time_start']);
 }
 var s2col = ee.ImageCollection('COPERNICUS/S2_SR_HARMONIZED').filterBounds(aoi)
@@ -72,6 +72,13 @@ Map.addLayer(cov.select('NDVI'), {min: 0, max: 0.8, palette: ['#d8c39a', '#2e7d3
 Map.addLayer(cov.select(['bare_S1', 'bare_N', 'bare_R']), {min: 0.05, max: 0.35}, 'Открытая почва', false);
 
 // ---------- Экспорт ----------
+// 0) Стек ковариат в Asset: модель (03_model.js) читает готовый ассет,
+//    иначе интерактивный расчёт упирается в "User memory limit exceeded".
+Export.image.toAsset({image: cov, description: 'covariates_30m_asset',
+  assetId: 'projects/YOUR_PROJECT/assets/covariates_30m',
+  region: aoi, scale: SCALE, crs: 'EPSG:32643', maxPixels: 1e13,
+  pyramidingPolicy: {'.default': 'mean', 'LC': 'mode'}});
+
 // 1) Стек ковариат (GeoTIFF, UTM 43N) — для моделирования в R/Python
 Export.image.toDrive({image: cov, description: 'covariates_30m', folder: 'SOC_GEE',
   region: aoi, scale: SCALE, crs: 'EPSG:32643', maxPixels: 1e13});
