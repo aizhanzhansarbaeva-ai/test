@@ -1,0 +1,3 @@
+point_id,lon,lat,land_use,SOC_0_10,SOC_10_20,SOC_20_30,SOC,split
+TI-001,76.912345,43.201234,pasture,30.53,26.25,20.79,77.57,train
+TI-002,77.104567,43.312890,cropland_rainfed,15.86,13.87,10.47,40.20,test
